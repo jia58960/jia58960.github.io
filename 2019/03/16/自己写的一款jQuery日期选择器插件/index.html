@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="基于jQuery写的一款日期选择器插件兼容性IE 6/7/8/9/10/11、Firefox、chrome、Safari、360、搜狗… 核心功能 选择日期，翻月，翻年，选择年份区间。 提供农历信息。 特色功能：强容错、按键控制（支持up、down、left、right、Enter、Esc、pageUp、pageDown）、不限于绑定元素、自动定位弹框位置（自动判断上下左右距离选择合适位置弹框）、">
+<meta name="keywords" content="jquery插件,日期选择器,农历日期选择">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自己写的一款jQuery日期选择器插件">
+<meta property="og:url" content="http://blog.jia58960.com/2019/03/16/自己写的一款jQuery日期选择器插件/index.html">
+<meta property="og:site_name" content="ethanZhang&#39;s Blog">
+<meta property="og:description" content="基于jQuery写的一款日期选择器插件兼容性IE 6/7/8/9/10/11、Firefox、chrome、Safari、360、搜狗… 核心功能 选择日期，翻月，翻年，选择年份区间。 提供农历信息。 特色功能：强容错、按键控制（支持up、down、left、right、Enter、Esc、pageUp、pageDown）、不限于绑定元素、自动定位弹框位置（自动判断上下左右距离选择合适位置弹框）、">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-16T14:09:35.862Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="自己写的一款jQuery日期选择器插件">
+<meta name="twitter:description" content="基于jQuery写的一款日期选择器插件兼容性IE 6/7/8/9/10/11、Firefox、chrome、Safari、360、搜狗… 核心功能 选择日期，翻月，翻年，选择年份区间。 提供农历信息。 特色功能：强容错、按键控制（支持up、down、left、right、Enter、Esc、pageUp、pageDown）、不限于绑定元素、自动定位弹框位置（自动判断上下左右距离选择合适位置弹框）、">
+
+
+
+
+
+
+  <link rel="canonical" href="http://blog.jia58960.com/2019/03/16/自己写的一款jQuery日期选择器插件/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>自己写的一款jQuery日期选择器插件 | ethanZhang's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ethanZhang's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">一个老前端的小窝</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.jia58960.com/2019/03/16/自己写的一款jQuery日期选择器插件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ethanZhang">
+      <meta itemprop="description" content="前端,生活,杂记">
+      <meta itemprop="image" content="https://avatars2.githubusercontent.com/u/1920563?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ethanZhang's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">自己写的一款jQuery日期选择器插件
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-16 22:07:18 / 修改时间：22:09:35" itemprop="dateCreated datePublished" datetime="2019-03-16T22:07:18+08:00">2019-03-16</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/插件/" itemprop="url" rel="index"><span itemprop="name">插件</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/2019/03/16/自己写的一款jQuery日期选择器插件/" class="leancloud_visitors" data-flag-title="自己写的一款jQuery日期选择器插件">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="基于jQuery写的一款日期选择器插件"><a href="#基于jQuery写的一款日期选择器插件" class="headerlink" title="基于jQuery写的一款日期选择器插件"></a>基于jQuery写的一款日期选择器插件</h2><h4 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h4><p>IE 6/7/8/9/10/11、Firefox、chrome、Safari、360、搜狗…</p>
+<h4 id="核心功能"><a href="#核心功能" class="headerlink" title="核心功能"></a>核心功能</h4><ul>
+<li>选择日期，翻月，翻年，选择年份区间。</li>
+<li>提供农历信息。</li>
+<li>特色功能：强容错、按键控制（支持up、down、left、right、Enter、Esc、pageUp、pageDown）、不限于绑定元素、自动定位弹框位置（自动判断上下左右距离选择合适位置弹框）、回调函数（自行处理返回的日期对象）</li>
+<li>代码特色：模板数据分离、模板引擎、DOM节点缓存、按需加载…</li>
+</ul>
+<p>因为核心代码较多，就不大片大片的贴代码了。下面贴一些核心处理代码</p>
+<a id="more"></a>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 日期选择类(依赖jquery)</span></span><br><span class="line"><span class="comment"> * @Author: 张佳(jia58960)</span></span><br><span class="line"><span class="comment"> * @Update: 2014/12/09</span></span><br><span class="line"><span class="comment"> * @param &#123;Object&#125; target 必选,需要绑定的元素对象,要求是jQuery对象</span></span><br><span class="line"><span class="comment"> * @param &#123;Date&#125; date 可选,初始化的时间</span></span><br><span class="line"><span class="comment"> * @param &#123;String&#125; dateFormat 可选,日期显示格式。如"yyyy-MM-dd"</span></span><br><span class="line"><span class="comment"> * @param &#123;Function&#125; callback 可选,选择日期后的回调</span></span><br><span class="line"><span class="comment"> * @param &#123;String&#125; direction 可选,日历选择器的展示位置</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @examples</span></span><br><span class="line"><span class="comment"> * new CalendarSelector(&#123;container:$("#demo"),date:'2014-11-12',dateFormat:'yyyy-MM-dd',callback&#125;);</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @returns &#123;Object&#125; dateObj 选中的日期对象</span></span><br><span class="line"><span class="comment">            &#123;String&#125; dateString 指定格式的日期字符串（2014-12-09）</span></span><br><span class="line"><span class="comment">            &#123;Int&#125; year 选中日期的年份 2014</span></span><br><span class="line"><span class="comment">            &#123;Int&#125; month 选中日期的月份 12</span></span><br><span class="line"><span class="comment">            &#123;Int&#125; date 选中日期的天 9</span></span><br><span class="line"><span class="comment">            &#123;String&#125; lunarDate 选中日期日的农历表示 十八</span></span><br><span class="line"><span class="comment">            &#123;String&#125; lunarMonth 选中日期月的农历表示 十月</span></span><br><span class="line"><span class="comment">            &#123;String&#125; lunarYear 选中日期的年份表示 二零一四</span></span><br><span class="line"><span class="comment">            &#123;String&#125; hsebYear 选中日期的干支年份表示 甲午年</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 封装好代码中可能会经常用到的工具类</span></span><br><span class="line"><span class="comment"> * 提供一般的工具方法,抽离原因是希望日历选择器可以独立适用于各页面</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> Tools = &#123;</span><br><span class="line">        <span class="built_in">Date</span>: &#123;</span><br><span class="line">            <span class="comment">/**</span></span><br><span class="line"><span class="comment">             * 将日期字符串转换成标准日期对象</span></span><br><span class="line"><span class="comment">             * @param &#123;String&#125; str 时间字符串,如 2014/01/01 或者2014-1-1</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            parse: <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="regexp">/^\d&#123;10&#125;$/</span>.test(str)) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>(str * <span class="number">1000</span>);</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="regexp">/^\d&#123;13&#125;$/</span>.test(str)) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>(str * <span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                str = Tools.Text.trim(str);</span><br><span class="line">                <span class="keyword">var</span> reg = <span class="regexp">/^(\d&#123;4&#125;)[-\/](\d&#123;1,2&#125;)[-\/](\d&#123;1,2&#125;)$/</span>;</span><br><span class="line">                <span class="keyword">var</span> m = str.match(reg);</span><br><span class="line">                <span class="keyword">if</span> (m) &#123;</span><br><span class="line">                    <span class="keyword">var</span> year = m[<span class="number">1</span>];</span><br><span class="line">                    <span class="keyword">var</span> month = <span class="built_in">parseInt</span>(m[<span class="number">2</span>] - <span class="number">1</span>, <span class="number">10</span>);</span><br><span class="line">                    <span class="keyword">var</span> day = <span class="built_in">parseInt</span>(m[<span class="number">3</span>], <span class="number">10</span>);</span><br><span class="line">                    <span class="keyword">var</span> hour = <span class="built_in">parseInt</span>(m[<span class="number">4</span>], <span class="number">10</span>);</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>(year, month, day);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">undefined</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="comment">/**</span></span><br><span class="line"><span class="comment">             * 将时间对象格式化成指定格式的时间字符串</span></span><br><span class="line"><span class="comment">             * @param &#123;Date&#125; date 时间对象</span></span><br><span class="line"><span class="comment">             * @param &#123;String&#125; text 要格式化的文本格式</span></span><br><span class="line"><span class="comment">             * @returns &#123;String&#125;</span></span><br><span class="line"><span class="comment">             * @example</span></span><br><span class="line"><span class="comment">             * Tools.Date.formatToString(new Date(), 'yyyy-MM-dd')</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            formatToString: <span class="function"><span class="keyword">function</span>(<span class="params">date, text</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">var</span> reg = <span class="regexp">/yyyy|yy|M+|d+|S|w/g</span>;</span><br><span class="line">                text = text.replace(reg, <span class="function"><span class="keyword">function</span>(<span class="params">pattern</span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">var</span> result;</span><br><span class="line">                    <span class="keyword">switch</span> (pattern) &#123;</span><br><span class="line">                        <span class="keyword">case</span> <span class="string">"yyyy"</span>:</span><br><span class="line">                            result = date.getFullYear();</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        <span class="keyword">case</span> <span class="string">"yy"</span>:</span><br><span class="line">                            result = date.getFullYear().toString().substring(<span class="number">2</span>);</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        <span class="keyword">case</span> <span class="string">"M"</span>:</span><br><span class="line">                        <span class="keyword">case</span> <span class="string">"MM"</span>:</span><br><span class="line">                            result = date.getMonth() + <span class="number">1</span>;</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        <span class="keyword">case</span> <span class="string">"dd"</span>:</span><br><span class="line">                        <span class="keyword">case</span> <span class="string">"d"</span>:</span><br><span class="line">                            result = date.getDate();</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        <span class="keyword">default</span>:</span><br><span class="line">                            result = <span class="string">""</span>;</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (pattern.length == <span class="number">2</span> &amp;&amp; result.toString().length == <span class="number">1</span>) &#123;</span><br><span class="line">                        result = <span class="string">"0"</span> + result;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">return</span> result;</span><br><span class="line">                &#125;);</span><br><span class="line">                <span class="keyword">return</span> text;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line"></span><br><span class="line">        Text: &#123;</span><br><span class="line">            <span class="comment">/**</span></span><br><span class="line"><span class="comment">             * 格式化字符串，提供数组和object两种方式(本质就是一个小的模板引擎)</span></span><br><span class="line"><span class="comment">             * @example</span></span><br><span class="line"><span class="comment">             * Tools.Text.format("hello,&#123;name&#125;",&#123;name:"kitty"&#125;)</span></span><br><span class="line"><span class="comment">             * Tools.Text.format("hello,&#123;0&#125;",["kitty"])</span></span><br><span class="line"><span class="comment">             * @returns &#123;String&#125;</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            format: <span class="function"><span class="keyword">function</span>(<span class="params">str, arr</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">var</span> reg;</span><br><span class="line">                <span class="keyword">if</span> ($.isArray(arr)) &#123;</span><br><span class="line">                    reg = <span class="regexp">/\&#123;([\d]+)\&#125;/g</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    reg = <span class="regexp">/\&#123;([\w]+)\&#125;/g</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> str.replace(reg, <span class="function"><span class="keyword">function</span>(<span class="params">$<span class="number">0</span>, $<span class="number">1</span></span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">var</span> value = arr[$<span class="number">1</span>];</span><br><span class="line">                    <span class="keyword">if</span> (value !== <span class="literal">undefined</span>) &#123;</span><br><span class="line">                        <span class="keyword">return</span> value;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;,</span><br><span class="line">            </span><br><span class="line">            trim: <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">var</span> str = str,</span><br><span class="line">                str = str.replace(<span class="regexp">/^\s\s*/</span>, <span class="string">''</span>),</span><br><span class="line">                ws = <span class="regexp">/\s/</span>,</span><br><span class="line">                i = str.length;</span><br><span class="line">                <span class="keyword">while</span> (ws.test(str.charAt(--i)));</span><br><span class="line">                    <span class="keyword">return</span> str.slice(<span class="number">0</span>, i + <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 构造方法</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">CalendarSelector</span>(<span class="params">options</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.initialize(options);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//直接在原型上扩展相关属性与方法，省去闭包的开销</span></span><br><span class="line">CalendarSelector.prototype = &#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 模板</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">    template: &#123;</span><br><span class="line">            main: [<span class="string">'&lt;div id="calendarS_&#123;cid&#125;" class="calendarSelector" style="position:absolute; z-index:999"&gt;'</span>,</span><br><span class="line">                        <span class="string">'&lt;div class="tips calendarPlugin" id="datepickerDays" style="display: block;"&gt;'</span>,</span><br><span class="line">                            <span class="string">'&lt;div class="calendarPlugin_top"&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;a href="javascript:void(0);" class="i-calendarLeft" id="prevMonth"&gt;&lt;/a&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;a href="javascript:void(0);" class="calendarPlugin_time" id="dateDisplay"&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;/a&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;a href="javascript:void(0);" class="i-calendarRight" id="nextMonth"&gt;&lt;/a&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;input type="hidden" id="currentDate" /&gt;'</span>,</span><br><span class="line">                            <span class="string">'&lt;/div&gt;'</span>,</span><br><span class="line">                            <span class="string">'&lt;table class="calendarPluginTable"&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;thead&gt;'</span>,</span><br><span class="line">                                    <span class="string">'&lt;tr&gt;&lt;th&gt;日&lt;/th&gt;&lt;th&gt;一&lt;/th&gt;&lt;th&gt;二&lt;/th&gt;&lt;th&gt;三&lt;/th&gt;&lt;th&gt;四&lt;/th&gt;&lt;th&gt;五&lt;/th&gt;&lt;th&gt;六&lt;/th&gt;&lt;/tr&gt;'</span>,</span><br><span class="line">                                    <span class="string">'&lt;/thead&gt;'</span>,</span><br><span class="line">                                    <span class="string">'&lt;tbody id="dateSelectorTBody"&gt;&lt;/tbody&gt;'</span>,</span><br><span class="line">                            <span class="string">'&lt;/table&gt;'</span>,</span><br><span class="line">                        <span class="string">'&lt;/div&gt;'</span>,</span><br><span class="line">                        <span class="string">'&lt;div class="tips calendarPlugin" id="datepickerMonths" style="display: none;"&gt;'</span>,</span><br><span class="line">                            <span class="string">'&lt;div class="calendarPlugin_top"&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;a href="javascript:void(0);" class="i-calendarLeft" id="prevYear"&gt;&lt;/a&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;a href="javascript:void(0);" class="calendarPlugin_timeS" id="yearDisplay"&gt;'</span>,<span class="string">'&lt;/a&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;a href="javascript:void(0);" class="i-calendarRight" id="nextYear"&gt;&lt;/a&gt;'</span>,</span><br><span class="line">                            <span class="string">'&lt;/div&gt;'</span>,</span><br><span class="line">                            <span class="string">'&lt;table class="calendarPluginTable_other"&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;tbody id="monthSelectorTBody"&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;tr&gt;'</span>,</span><br><span class="line">                                    <span class="string">'&lt;td&gt;&lt;div&gt;1月&lt;/div&gt;&lt;/td&gt;'</span>,</span><br><span class="line">                                    <span class="string">'&lt;td&gt;&lt;div&gt;2月&lt;/div&gt;&lt;/td&gt;'</span>,</span><br><span class="line">                                    <span class="string">'&lt;td&gt;&lt;div&gt;3月&lt;/div&gt;&lt;/td&gt;'</span>,</span><br><span class="line">                                    <span class="string">'&lt;td&gt;&lt;div&gt;4月&lt;/div&gt;&lt;/td&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;/tr&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;tr&gt;'</span>,</span><br><span class="line">                                    <span class="string">'&lt;td&gt;&lt;div&gt;5月&lt;/div&gt;&lt;/td&gt;'</span>,</span><br><span class="line">                                    <span class="string">'&lt;td&gt;&lt;div&gt;6月&lt;/div&gt;&lt;/td&gt;'</span>,</span><br><span class="line">                                    <span class="string">'&lt;td&gt;&lt;div&gt;7月&lt;/div&gt;&lt;/td&gt;'</span>,</span><br><span class="line">                                    <span class="string">'&lt;td&gt;&lt;div&gt;8月&lt;/div&gt;&lt;/td&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;/tr&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;tr&gt;'</span>,</span><br><span class="line">                                    <span class="string">'&lt;td&gt;&lt;div&gt;9月&lt;/div&gt;&lt;/td&gt;'</span>,</span><br><span class="line">                                    <span class="string">'&lt;td&gt;&lt;div&gt;10月&lt;/div&gt;&lt;/td&gt;'</span>,</span><br><span class="line">                                    <span class="string">'&lt;td&gt;&lt;div&gt;11月&lt;/div&gt;&lt;/td&gt;'</span>,</span><br><span class="line">                                    <span class="string">'&lt;td&gt;&lt;div&gt;12月&lt;/div&gt;&lt;/td&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;/tr&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;/tbody&gt;'</span>,</span><br><span class="line">                            <span class="string">'&lt;/table&gt;'</span>,</span><br><span class="line">                        <span class="string">'&lt;/div&gt;'</span>,</span><br><span class="line">                        <span class="string">'&lt;div class="tips calendarPlugin" id="datepickerYears" style="display: none;"&gt;'</span>,</span><br><span class="line">                            <span class="string">'&lt;div class="calendarPlugin_top"&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;a href="javascript:void(0);" class="i-calendarLeft" id="prevRangeYear"&gt;&lt;/a&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;span class="calendarPlugin_timeS" id="yearRangeDisplay"&gt;'</span>,<span class="string">'&lt;/span&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;a href="javascript:void(0);" class="i-calendarRight" id="nextRangeYear"&gt;&lt;/a&gt;'</span>,</span><br><span class="line">                            <span class="string">'&lt;/div&gt;'</span>,</span><br><span class="line">                            <span class="string">'&lt;table class="calendarPluginTable_other"&gt;'</span>,</span><br><span class="line">                                <span class="string">'&lt;tbody id="yearSelectorTBody"&gt;&lt;/tbody&gt;'</span>,</span><br><span class="line">                            <span class="string">'&lt;/table&gt;'</span>,</span><br><span class="line">                    <span class="string">'&lt;/div&gt;'</span>].join(<span class="string">''</span>),</span><br><span class="line"></span><br><span class="line">            date: [<span class="string">'&lt;td class="&#123;isSelectable&#125;" title="农历&#123;lunarDateStr&#125;" date="&#123;stringDate&#125;"&gt;'</span>,</span><br><span class="line">                        <span class="string">'&lt;div class="&#123;isToday&#125;"&gt;'</span>,</span><br><span class="line">                            <span class="string">'&lt;span&gt;&#123;currentDay&#125;&lt;/span&gt;'</span>,<span class="string">'&lt;p&gt;&#123;lunarDate&#125;&lt;/p&gt;'</span>,</span><br><span class="line">                        <span class="string">'&lt;/div&gt;'</span>,</span><br><span class="line">                    <span class="string">'&lt;/td&gt;'</span></span><br><span class="line">                    ].join(<span class="string">''</span>),</span><br><span class="line"></span><br><span class="line">            year: [<span class="string">'&lt;td class="&#123;isSelectableYear&#125;" year="&#123;stringYear&#125;"&gt;'</span>,</span><br><span class="line">                    <span class="string">'&lt;div class="&#123;isThisYear&#125;"&gt;&#123;stringYear&#125;&lt;/div&gt;'</span>,</span><br><span class="line">                    <span class="string">'&lt;/td&gt;'</span>].join(<span class="string">''</span>)</span><br><span class="line"></span><br><span class="line">        &#125;,</span><br><span class="line">        monthNames: [<span class="string">"1月"</span>, <span class="string">"2月"</span>, <span class="string">"3月"</span>, <span class="string">"4月"</span>, <span class="string">"5月"</span>, <span class="string">"6月"</span>, <span class="string">"7月"</span>, <span class="string">"8月"</span>, <span class="string">"9月"</span>, <span class="string">"10月"</span>, <span class="string">"11月"</span>, <span class="string">"12月"</span>],</span><br><span class="line">        monthNumber: [<span class="string">"01"</span>, <span class="string">"02"</span>, <span class="string">"03"</span>, <span class="string">"04"</span>, <span class="string">"05"</span>, <span class="string">"06"</span>, <span class="string">"07"</span>, <span class="string">"08"</span>, <span class="string">"09"</span>, <span class="string">"10"</span>, <span class="string">"11"</span>, <span class="string">"12"</span>],</span><br><span class="line">        minYear: <span class="number">1901</span>,</span><br><span class="line">        maxYear: <span class="number">2049</span>,</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 初始化</span></span><br><span class="line"><span class="comment">         * @param &#123;Object&#125; target 必选,需要绑定的元素对象,要求是jQuery对象</span></span><br><span class="line"><span class="comment">         * @param &#123;Date&#125; date 可选,初始化的时间</span></span><br><span class="line"><span class="comment">         * @param &#123;String&#125; dateFormat 可选,日期显示格式。如"yyyy-MM-dd"</span></span><br><span class="line"><span class="comment">         * @param &#123;Function&#125; callback 可选,选择日期后的回调</span></span><br><span class="line"><span class="comment">         * @param &#123;String&#125; direction 可选,日历选择器的展示位置。默认展示在元素target下方并左对齐</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        initialize: <span class="function"><span class="keyword">function</span>(<span class="params">options</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> self = <span class="keyword">this</span>;</span><br><span class="line">            <span class="comment">//参数初始化</span></span><br><span class="line">            options || (options = &#123;&#125;); <span class="comment">//容错</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (!options.container) &#123; <span class="comment">//必须的参数检测</span></span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'[CalendarSelector] container is empty!'</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">this</span>.target = $(options.container);</span><br><span class="line">            <span class="comment">//date参数转换和保存</span></span><br><span class="line">            <span class="keyword">var</span> date = options.date || <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">typeof</span> date !== <span class="string">'object'</span>) &#123;</span><br><span class="line">                date = Tools.Date.parse(date);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">this</span>.date = date || <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">this</span>.dateFormat = options.dateFormat || <span class="string">"yyyy-MM-dd"</span>;</span><br><span class="line">            <span class="keyword">this</span>.callback = options.callback || <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">            <span class="keyword">this</span>.direction = options.direction || <span class="string">"Auto"</span>;</span><br><span class="line">            <span class="keyword">this</span>.cid = <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">1000000000</span>);</span><br><span class="line">            <span class="keyword">this</span>.pickerArea = $(Tools.Text.format(<span class="keyword">this</span>.template.main, &#123;<span class="attr">cid</span>: <span class="keyword">this</span>.cid&#125;));</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">this</span>.lastTargetTop = <span class="keyword">this</span>.target.offset().top;</span><br><span class="line">            <span class="keyword">this</span>.target.on(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">                self.show();</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;,</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 事件绑定</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    initEvents: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">this</span>.prevMonthBtn.on(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">            self.addMonth(<span class="number">-1</span>); </span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">        <span class="comment">//选择某年</span></span><br><span class="line">        <span class="keyword">this</span>.yearSelectorTbodyEl.on(<span class="string">'click'</span>, <span class="string">'td'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> tmpYear = $(event.currentTarget).attr(<span class="string">"year"</span>);</span><br><span class="line">            <span class="keyword">if</span> (tmpYear &gt; self.maxYear || tmpYear &lt; self.minYear)&#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                self.selectYear(tmpYear);    </span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//选择某月</span></span><br><span class="line">        <span class="keyword">this</span>.monthTdBtn.on(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">            self.selectMonth(event);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">// 选择某天</span></span><br><span class="line">        <span class="keyword">this</span>.dateSelectorTbodyEl.on(<span class="string">'click'</span>, <span class="string">'td'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">          self.changeDate($(event.currentTarget).attr(<span class="string">"date"</span>));</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//注册mouseover与mouseout事件</span></span><br><span class="line">        <span class="keyword">this</span>.monthSelectorTbodyEl.on(&#123;</span><br><span class="line">            mouseover: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> clsName = $(<span class="keyword">this</span>).attr(<span class="string">'class'</span>);</span><br><span class="line">            <span class="keyword">if</span> (!!!clsName) &#123;</span><br><span class="line">              $(<span class="keyword">this</span>).addClass(<span class="string">"onHoverDay"</span>);  </span><br><span class="line">            &#125;  </span><br><span class="line">          &#125;,</span><br><span class="line">          mouseout: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (!$(<span class="keyword">this</span>).hasClass(<span class="string">'onDay'</span>))&#123;</span><br><span class="line">                $(<span class="keyword">this</span>).removeClass(<span class="string">"onHoverDay"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,<span class="string">'td div'</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.dateSelectorTbodyEl.on(&#123;</span><br><span class="line">            mouseover: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (!$(<span class="keyword">this</span>).hasClass(<span class="string">'onDay'</span>) )&#123;</span><br><span class="line">                $(<span class="keyword">this</span>).addClass(<span class="string">"onHoverDay"</span>);</span><br><span class="line">            &#125; </span><br><span class="line">          &#125;,</span><br><span class="line">          mouseout: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (!$(<span class="keyword">this</span>).hasClass(<span class="string">'onDay'</span>))&#123;</span><br><span class="line">                $(<span class="keyword">this</span>).removeClass(<span class="string">"onHoverDay"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,<span class="string">'td div'</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.yearSelectorTbodyEl.on(&#123;</span><br><span class="line">            mouseover: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (!$(<span class="keyword">this</span>).hasClass(<span class="string">'onDay'</span>) )&#123;</span><br><span class="line">                $(<span class="keyword">this</span>).addClass(<span class="string">"onHoverDay"</span>);</span><br><span class="line">            &#125; </span><br><span class="line">          &#125;,</span><br><span class="line">          mouseout: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (!$(<span class="keyword">this</span>).hasClass(<span class="string">'onDay'</span>))&#123;</span><br><span class="line">                $(<span class="keyword">this</span>).removeClass(<span class="string">"onHoverDay"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,<span class="string">'td div'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 更多代码见后文下载</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上只是大概给出设计的思路，即完全的MVC思想。抽离模板，渲染数据，最后是对DOM进行相关操作。这种做法使得代码层次结构清晰，而且便于维护。以下给出所有代码的下载地址，欢迎各路朋友拍砖。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ethanZhang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="http://blog.jia58960.com/2019/03/16/自己写的一款jQuery日期选择器插件/" title="自己写的一款jQuery日期选择器插件">http://blog.jia58960.com/2019/03/16/自己写的一款jQuery日期选择器插件/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jquery插件/" rel="tag"># jquery插件</a>
+          
+            <a href="/tags/日期选择器/" rel="tag"># 日期选择器</a>
+          
+            <a href="/tags/农历日期选择/" rel="tag"># 农历日期选择</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/16/javascript-seires-one/" rel="next" title="彻底弄清楚async/defer与window.onload">
+                <i class="fa fa-chevron-left"></i> 彻底弄清楚async/defer与window.onload
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://avatars2.githubusercontent.com/u/1920563?s=460&v=4" alt="ethanZhang">
+            
+              <p class="site-author-name" itemprop="name">ethanZhang</p>
+              <div class="site-description motion-element" itemprop="description">前端,生活,杂记</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/jia58960" title="GitHub &rarr; https://github.com/jia58960" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:547221469@qq.com" title="E-Mail &rarr; mailto:547221469@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基于jQuery写的一款日期选择器插件"><span class="nav-number">1.</span> <span class="nav-text">基于jQuery写的一款日期选择器插件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#兼容性"><span class="nav-number">1.0.1.</span> <span class="nav-text">兼容性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#核心功能"><span class="nav-number">1.0.2.</span> <span class="nav-text">核心功能</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ethanZhang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/three/three.min.js"></script>
+
+  
+  <script src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'YA9HzQMpTAUsc04oxcGowdCY-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'YA9HzQMpTAUsc04oxcGowdCY-gzGzoHsz',
+                'X-LC-Key': 'f7IHIyu0oA2jfOv6TueIJaFb',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

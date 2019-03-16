@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="async与defer到底有什么区别？window.onload、$(document).ready的执行时机是？">
+<meta name="keywords" content="async&#x2F;defer,资源加载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="彻底弄清楚async&#x2F;defer与window.onload">
+<meta property="og:url" content="http://blog.jia58960.com/2019/03/16/javascript-seires-one/index.html">
+<meta property="og:site_name" content="ethanZhang&#39;s Blog">
+<meta property="og:description" content="async与defer到底有什么区别？window.onload、$(document).ready的执行时机是？">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-16T14:06:32.811Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="彻底弄清楚async&#x2F;defer与window.onload">
+<meta name="twitter:description" content="async与defer到底有什么区别？window.onload、$(document).ready的执行时机是？">
+
+
+
+
+
+
+  <link rel="canonical" href="http://blog.jia58960.com/2019/03/16/javascript-seires-one/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>彻底弄清楚async/defer与window.onload | ethanZhang's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ethanZhang's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">一个老前端的小窝</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.jia58960.com/2019/03/16/javascript-seires-one/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ethanZhang">
+      <meta itemprop="description" content="前端,生活,杂记">
+      <meta itemprop="image" content="https://avatars2.githubusercontent.com/u/1920563?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ethanZhang's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">彻底弄清楚async/defer与window.onload
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-16 21:32:38 / 修改时间：22:06:32" itemprop="dateCreated datePublished" datetime="2019-03-16T21:32:38+08:00">2019-03-16</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/基础/" itemprop="url" rel="index"><span itemprop="name">基础</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/2019/03/16/javascript-seires-one/" class="leancloud_visitors" data-flag-title="彻底弄清楚async/defer与window.onload">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+            <div class="post-description">async与defer到底有什么区别？window.onload、$(document).ready的执行时机是？</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="javascript基础知识集锦"><a href="#javascript基础知识集锦" class="headerlink" title="javascript基础知识集锦"></a>javascript基础知识集锦</h2><h3 id="一、async与defer的区别"><a href="#一、async与defer的区别" class="headerlink" title="一、async与defer的区别"></a>一、async与defer的区别</h3><p>对于defer，我们可以认为是将外链的js放在了页面底部。js的加载不会阻塞页面的渲染和资源的加载。不过defer会按照原本的js的顺序执行，所以如果前后有依赖关系的js可以放心使用。</p>
+<p>但是每一个async属性的脚本都在它下载结束之后<strong>立刻执行</strong>，同时会在window的load事件之前执行。所以就有可能出现脚本执行顺序被打乱的情况；每一个defer属性的脚本都是在页面解析完毕之后，按照原本的顺序执行，同时会在document的DOMContentLoaded之前执行。</p>
+<p>两者的区别在于执行时的不同：async 脚本在script文件下载完成后会立即执行,并且其执行时间一定在window的load事件触发之前。这意味着多个async脚本很可能不会按其在页面中的出现次序顺序执行。与此相对，浏览器确保多个 defer 脚本按其在HTML页面中的出现顺序依次执行,且执行时机为DOM解析完成后，document的DOMContentLoaded 事件触发之前。</p>
+<h3 id="二、window-onload、-document-ready这两个方法进行简单的比较"><a href="#二、window-onload、-document-ready这两个方法进行简单的比较" class="headerlink" title="二、window.onload、$(document).ready这两个方法进行简单的比较"></a>二、window.onload、$(document).ready这两个方法进行简单的比较</h3><ul>
+<li><p><strong>执行时机</strong><br>window.onload：必须等待网页中所有的内容加载完毕后（包括图片）才能执行。<br>$(document).ready：网页中所有DOM结构绘制完毕后就执行，可能DOM元素关联的东西并没有加载完</p>
+</li>
+<li><p><strong>执行次数</strong><br>window.onload只能执行一次，但$(document).ready()则可以执行多次。<br>如下代码：  </p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;  </span><br><span class="line"> alert(<span class="string">"demo1"</span>)  </span><br><span class="line">&#125;;  </span><br><span class="line"><span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;  </span><br><span class="line"> alert(<span class="string">"demo2"</span>)  </span><br><span class="line">&#125;;  </span><br><span class="line"><span class="comment">//结果demo2，其实就是方法覆盖。</span></span><br></pre></td></tr></table></figure>
+<p>但是在$(document).ready()中：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;  </span><br><span class="line">   alert(<span class="string">"demo1!"</span>);  </span><br><span class="line">&#125;);  </span><br><span class="line">$(<span class="built_in">document</span>).ready(fcuntion() &#123;  </span><br><span class="line">   alert(<span class="string">"demo2!"</span>);  </span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//结果是先输出demo1，再输出demo2。两次都会输出。</span></span><br></pre></td></tr></table></figure>
+<p>另外，需要注意一点，由于在$(document).ready()方法内注册的事件，只要DOM就绪就会被执行，因此可能此时元素的关联文件未下载完。例如与图片有关的HTML下载完毕，并且已经解析为DOM树了，但很有可能图片还未加载完毕，所以例如图片的高度和宽度这样的属性此时不一定有效。要解决这个问题，可以使用jQuery中另一个关于页面加载的方法——load方法。<strong>load()方法会在元素的onload事件中绑定一个处理方法。如果处理方法绑定给window对象，则会在所有内容（包括窗口、框架、对象和图像等）加载完毕后触发，如果处理方法绑定在元素上，则会在元素的内容加载完毕后触发。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="built_in">window</span>).load(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">//干点事</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">//干点事</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//以上两方法等价</span></span><br></pre></td></tr></table></figure>
+<p><strong>注意:</strong>只有当在这个元素完全加载完之前绑定load的处理函数,才会在他加载完后触发。如果之后再绑定就永远不会触发了。所以不要在$(document).ready()里绑定load事件，因为jQuery会在所有DOM加载完成后再绑定load事件。</p>
+<p><strong>调用load方法的完整格式是:</strong>load( url, [data], [callback] )<br>其中:  </p>
+<ul>
+<li><p>url：是指要导入文件的地址。   </p>
+</li>
+<li><p>data：可选参数；因为Load不仅仅可以导入静态的html文件，还可以导入动态脚本，例如PHP文件，所以要导入的是动态文件时，我们可以把要传递的参数放在这里。  </p>
+</li>
+<li><p>callback：可选参数；是指调用load方法并得到服务器响应后的回调函数。  </p>
+</li>
+</ul>
+<p><strong>注意：使用load，这些参数是以POST的方式传递的，因此在后端语言中不能用GET来获取参数。</strong></p>
+<h3 id="三、use-strict，undefined与null，typeof操作符"><a href="#三、use-strict，undefined与null，typeof操作符" class="headerlink" title="三、use strict，undefined与null，typeof操作符"></a>三、use strict，undefined与null，typeof操作符</h3><p>use strict：即所谓的严格模式，严格模式下，ECMAScript 3中的一些不确定行为将得到处理，而且对某些不安全操作也会抛出错误。这是为不破坏ECMAScript 3语法而特意选定的语法。严格模式下，js的执行结果会有很大不同</p>
+<p>undefined与null：undefined实际上是派生自null的，所以undefined==null是返回true的，引入undefined字面量的主要目的就是用于比较，ES3引入undefined就是为了正式区分未初始化变量与空对象(null)。最佳实践：显式地初始化变量是明智的选择，如果我们检测到某变量为undefined，则代表该变量不是未初始化而是未声明。无论在什么情况下也不要显示地声明变量值为undefined，而对于将要保存对象而暂时还没保存对象的变量，应明确地初始化其变量值为null。</p>
+<p>typeof：该操作符对函数会返回function。其实从技术角度讲，函数在ES（ECMAScript的缩写）中是对象的，而不是一种数据类型。然而函数也确实有一些特殊属性，所以一般用typeof来区分函数与其他对象。</p>
+<h3 id="四、有关JS中的Number数据类型"><a href="#四、有关JS中的Number数据类型" class="headerlink" title="四、有关JS中的Number数据类型"></a>四、有关JS中的Number数据类型</h3><ul>
+<li>NaN的两个特点，首先是任何涉及到和NaN的操作都会返回NaN；其次是NaN和任何值都不相等，包括它本身！注意，0除以0会返回NaN，负数除以0返回-Infinity，正数除以0返回Infinity。如下测试：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">2.342</span>/<span class="number">0</span>);</span><br><span class="line">&gt;&gt;<span class="literal">Infinity</span> </span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">-0.02342</span>/<span class="number">0</span>);</span><br><span class="line">&gt;&gt;-<span class="literal">Infinity</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">0</span>/<span class="number">0</span>);</span><br><span class="line">&gt;&gt;<span class="literal">NaN</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>几个常用方法isFinite() 、isNaN() 、 Number()、parseInt() 、parseFloat()。前面两个方法根据方法名就能猜到它们的作用，对后面三种方法举例说明吧：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1.Number()</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="number">123</span>); <span class="comment">//123</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="number">1.23</span>); <span class="comment">//1.23</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="string">'0123'</span>); <span class="comment">//123</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="string">'true'</span>); <span class="comment">//NaN</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="literal">true</span>); <span class="comment">//1</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="string">'121aasd'</span>); <span class="comment">//NaN</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="string">'undefind'</span>); <span class="comment">//NaN</span></span><br><span class="line"><span class="built_in">Number</span>(obj); <span class="comment">//调用对象的valueOf()方法,若返回NaN，则调用对象的toString()方法.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//2.parseInt()</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">'1234blue'</span>); <span class="comment">//1234</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">'-123'</span>); <span class="comment">//-123</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">'-12.3'</span>); <span class="comment">//-12</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">''</span>); <span class="comment">//NaN</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">'true'</span>); <span class="comment">//NaN</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="number">0xf</span>); <span class="comment">//15</span></span><br><span class="line"><span class="comment">//parseInt()会忽略字符串前面的空格，直至找到第一个非空格字符，若第一个字符不是数字字符或负号则返回NaN，所以用parseInt()转换空字符串会返回NaN.在ES3中，parseInt("070")会被解析为是56（八进制），而ES5中则是70。最佳实践：在用使用parseInt()时，无论如何都带上进制参数，如：parseInt('070,10');</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//3.parseFloat()</span></span><br><span class="line"><span class="built_in">parseFloat</span>(<span class="string">'12.32.21'</span>);  <span class="comment">//12.32</span></span><br><span class="line"><span class="built_in">parseFloat</span>(<span class="string">'12.32afa'</span>); <span class="comment">//12.32</span></span><br><span class="line"><span class="built_in">parseFloat</span>(<span class="string">'0xf'</span>); <span class="comment">//0</span></span><br><span class="line"><span class="built_in">parseFloat</span>(<span class="string">"3.125e7"</span>); <span class="comment">//31250000</span></span><br><span class="line"><span class="built_in">parseFloat</span>(<span class="string">'0902.32'</span>); <span class="comment">//902.32</span></span><br><span class="line"><span class="comment">//parseFloat()也是从第一个字符开始解析，直至解析到字符串末尾，或遇到一个无效的浮点数字字符为止。另外，parseFloat()只会解析十进制，对所有16进制格式的字符串都会解析为0.它有没有第二个参数，最后若字符串可以解析为一个整数，那它则返回整数。</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ethanZhang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="http://blog.jia58960.com/2019/03/16/javascript-seires-one/" title="彻底弄清楚async/defer与window.onload">http://blog.jia58960.com/2019/03/16/javascript-seires-one/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/async-defer/" rel="tag"># async/defer</a>
+          
+            <a href="/tags/资源加载/" rel="tag"># 资源加载</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/16/自己写的一款jQuery日期选择器插件/" rel="prev" title="自己写的一款jQuery日期选择器插件">
+                自己写的一款jQuery日期选择器插件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://avatars2.githubusercontent.com/u/1920563?s=460&v=4" alt="ethanZhang">
+            
+              <p class="site-author-name" itemprop="name">ethanZhang</p>
+              <div class="site-description motion-element" itemprop="description">前端,生活,杂记</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/jia58960" title="GitHub &rarr; https://github.com/jia58960" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:547221469@qq.com" title="E-Mail &rarr; mailto:547221469@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#javascript基础知识集锦"><span class="nav-number">1.</span> <span class="nav-text">javascript基础知识集锦</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、async与defer的区别"><span class="nav-number">1.1.</span> <span class="nav-text">一、async与defer的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、window-onload、-document-ready这两个方法进行简单的比较"><span class="nav-number">1.2.</span> <span class="nav-text">二、window.onload、$(document).ready这两个方法进行简单的比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、use-strict，undefined与null，typeof操作符"><span class="nav-number">1.3.</span> <span class="nav-text">三、use strict，undefined与null，typeof操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、有关JS中的Number数据类型"><span class="nav-number">1.4.</span> <span class="nav-text">四、有关JS中的Number数据类型</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ethanZhang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/three/three.min.js"></script>
+
+  
+  <script src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'YA9HzQMpTAUsc04oxcGowdCY-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'YA9HzQMpTAUsc04oxcGowdCY-gzGzoHsz',
+                'X-LC-Key': 'f7IHIyu0oA2jfOv6TueIJaFb',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
